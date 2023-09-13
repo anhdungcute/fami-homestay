@@ -119,7 +119,7 @@
 <script>
 import { ref, computed } from "vue";
 import { Delete } from "@element-plus/icons-vue";
-import axios from "axios";
+import BaseRequest from "../../../core/BaseRequest.js";
 import { ElNotification } from "element-plus";
 import { v4 as uuidv4 } from "uuid";
 export default {
@@ -138,67 +138,54 @@ export default {
     // Hàm gọi list khu vực
     getListArea();
     function getListArea() {
-      axios
-        .get(`http://localhost:3000/api/v1/area?page=1&perPage=10`)
-        .then((res) => {
-          tableData.value = res.data.result;
-        });
+      BaseRequest.get(`area?page=1&perPage=10`).then((res) => {
+        tableData.value = res.data.result;
+      });
     }
     // Hàm thêm mới khu vực
     function handlerCreate() {
-      axios
-        .post("http://localhost:3000/api/v1/area", formArea.value)
-        .then((res) => {
-          if (res) {
-            utilitiesClone.value = [{ text: "" }];
-            formArea.value = {
-              name: "",
-              address: "",
-              description: "",
-              utilities: [],
-            };
-            getListArea();
-            dialogTableVisible.value = false;
-            ElNotification({
-              title: "Thành công",
-              message: "Thêm khu vực thành công",
-              type: "success",
-            });
-          }
-        });
+      BaseRequest.post("area", formArea.value).then((res) => {
+        if (res) {
+          utilitiesClone.value = [{ text: "" }];
+          formArea.value = {
+            name: "",
+            address: "",
+            description: "",
+            utilities: [],
+          };
+          getListArea();
+          dialogTableVisible.value = false;
+          ElNotification({
+            title: "Thành công",
+            message: "Thêm khu vực thành công",
+            type: "success",
+          });
+        }
+      });
     }
     // Hàm sửa khu vực
     function handlerEdit(id) {
-      axios
-        .put(`http://localhost:3000/api/v1/area/${id}`, formArea.value)
-        .then((res) => {
-          if (res) {
-            getListArea();
-            dialogTableVisible.value = false;
-            ElNotification({
-              title: "Thành công",
-              message: "Chỉnh sửa khu vực thành công",
-              type: "success",
-            });
-          }
-        });
+      BaseRequest.put(`area/${id}`, formArea.value).then((res) => {
+        if (res) {
+          getListArea();
+          dialogTableVisible.value = false;
+          ElNotification({
+            title: "Thành công",
+            message: "Chỉnh sửa khu vực thành công",
+            type: "success",
+          });
+        }
+      });
     }
-    // const filterTableData = computed(() =>
-    //   tableData.value.filter(
-    //     (data) =>
-    //       !search.value ||
-    //       data.name.toLowerCase().includes(search.value.toLowerCase())
-    //   )
-    // );
     function addUtilitiesClone() {
       utilitiesClone.value.push({ text: "", id: uuidv4() });
-      console.log(" utilitiesClone.value", utilitiesClone.value);
     }
-    function hanleDeleteTn(val){
-         utilitiesClone.value =  utilitiesClone.value.filter(el => el.id != val.id)
+    function hanleDeleteTn(val) {
+      utilitiesClone.value = utilitiesClone.value.filter(
+        (el) => el.id != val.id
+      );
     }
     const handleEdit = (scope) => {
-      console.log(scope.row);
       utilitiesClone.value = [];
       scope.row.utilities.forEach((e) => {
         {
@@ -210,18 +197,16 @@ export default {
       dialogTableVisible.value = true;
     };
     const handleDelete = (scope) => {
-      axios
-        .delete(`http://localhost:3000/api/v1/area/${scope.row._id}`)
-        .then((res) => {
-          if (res) {
-            getListArea();
-            ElNotification({
-              title: "Thành công",
-              message: "Xóa khu vực thành công",
-              type: "success",
-            });
-          }
-        });
+      BaseRequest.delete(`area/${scope.row._id}`).then((res) => {
+        if (res) {
+          getListArea();
+          ElNotification({
+            title: "Thành công",
+            message: "Xóa khu vực thành công",
+            type: "success",
+          });
+        }
+      });
     };
 
     function showFormArea(check) {
@@ -242,11 +227,9 @@ export default {
           formArea.value.utilities.push(e.text);
         });
       }
-      console.log("vào tưới đay");
       if (isCheck.value) {
         handlerCreate();
       } else {
-        console.log("vào elsse");
         handlerEdit(formArea.value._id);
       }
     }
@@ -264,7 +247,7 @@ export default {
       handleACtion,
       addUtilitiesClone,
       handlerCreate,
-      hanleDeleteTn
+      hanleDeleteTn,
     };
   },
 };

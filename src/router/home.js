@@ -25,11 +25,6 @@ const home = [
           import("../components/Main/AboutUs/Introduce/index.vue"),
       },
       {
-        path: "",
-        name: "contact",
-        component: () => import("../components/Main/Contact/index.vue"),
-      },
-      {
         path: "management-homestay",
         name: "management",
         component: () => import("../components/Management/index.vue"),

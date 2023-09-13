@@ -46,24 +46,8 @@ export default {
     Swiper,
     SwiperSlide,
   },
-  setup() {
-    const dataImg = ref([
-      {
-        img: "https://zhomestay.vn/wp-content/uploads/2023/02/GTD_7230-copy-1199x800.jpg.webp",
-      },
-      {
-        img: "https://zhomestay.vn/wp-content/uploads/2023/02/GTD_7231-copy-534x800.jpg.webp",
-      },
-      {
-        img: "https://zhomestay.vn/wp-content/uploads/2023/02/GTD_7234-copy-1199x800.jpg.webp",
-      },
-      {
-        img: "https://zhomestay.vn/wp-content/uploads/2023/02/GTD_7235-copy-1199x800.jpg.webp",
-      },
-      {
-        img: "https://zhomestay.vn/wp-content/uploads/2023/02/GTD_7243-copy.jpg.webp",
-      },
-    ]);
+  setup(props, emit) {
+    const dataImg = ref([]);
     const progressCircle = ref(null);
     const progressContent = ref(null);
     const onAutoplayTimeLeft = (s, time, progress) => {
@@ -135,7 +119,7 @@ export default {
 }
 .slide-detail {
   position: relative;
-  height: 500px;
+  height: 350px;
 }
 @media screen and (max-width: 584px) {
   .slide-detail {

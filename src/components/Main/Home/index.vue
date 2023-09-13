@@ -1,12 +1,12 @@
 <template>
   <div v-if="show">
-    <div class="container-lg">
+    <div class="container-cus">
       <Apartment />
     </div>
     <div>
       <!-- <ListFood /> -->
     </div>
-    <div>
+    <div id="contact">
       <Contact />
     </div>
   </div>
@@ -26,7 +26,7 @@ export default {
   setup() {
     const show = ref(false);
     setTimeout(() => {
-      show.value = true
+      show.value = true;
     }, 0);
     return {
       show,
@@ -35,4 +35,9 @@ export default {
 };
 </script>
 
-<style></style>
+<style lang="scss" scope>
+.container-cus {
+  max-width: 1300px;
+  margin: 0 auto;
+}
+</style>

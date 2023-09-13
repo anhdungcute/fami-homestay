@@ -18,6 +18,10 @@
         :spaceBetween="30"
         :navigation="true"
         :modules="modules"
+        :autoplay="{
+          delay: 2500,
+          disableOnInteraction: false,
+        }"
         class="mySwiper pt-3"
         v-if="i.departments.length > 0"
       >
@@ -37,10 +41,19 @@
                 </div>
                 <div class="price-wrapper" v-if="item.price">
                   <span class="amount"
-                    >{{ item.price ? item.price : "Liên hệ" }}
+                    >{{ format(item.price) }}
                     <u style="font-size: 0.7em; padding-bottom: 2px">đ</u></span
                   >
-                  <span class="wceb-price-format">/ {{item.type=='DAY' ? 'Ngày' : item.type=='MONTH' ?'Tháng' :'Năm'}}</span>
+                  <span class="wceb-price-format"
+                    >/
+                    {{
+                      item.type == "DAY"
+                        ? "Ngày"
+                        : item.type == "MONTH"
+                        ? "Tháng"
+                        : "Năm"
+                    }}</span
+                  >
                 </div>
               </div>
             </div>
@@ -58,7 +71,7 @@ import { useRouter } from "vue-router";
 import { ref, defineComponent, onBeforeMount } from "vue";
 import { Swiper, SwiperSlide } from "swiper/vue";
 import "swiper/css/pagination";
-import axios from "axios";
+import BaseRequest from "../../../../core/BaseRequest.js";
 import { Autoplay, EffectCube, Pagination, Navigation } from "swiper";
 export default {
   components: {
@@ -93,11 +106,9 @@ export default {
     }
     getListArea();
     function getListArea() {
-      axios
-        .get(`http://localhost:3000/api/v1/area?page=1&perPage=10`)
-        .then((res) => {
-          dataRoom.value = res.data.result;
-        });
+      BaseRequest.get(`area?page=1&perPage=10`).then((res) => {
+        dataRoom.value = res.data.result;
+      });
     }
     function pushRouter(val) {
       router.push({
@@ -105,11 +116,19 @@ export default {
         query: { id: val._id },
       });
     }
+    const format = (num) => {
+      const n = String(num),
+        p = n.indexOf(".");
+      return n.replace(/\d(?=(?:\d{3})+(?:\.|$))/g, (m, i) =>
+        p < 0 || i < p ? `${m},` : m
+      );
+    };
     return {
       dataRoom,
       title,
       contentItem,
       pushRouter,
+      format,
       isMobile,
       modules: [Autoplay, Navigation],
     };
@@ -120,12 +139,12 @@ export default {
 <style lang="scss" scope>
 .el-divider__text {
   font-size: 20px !important;
-  color: #3A5134 !important;
+  color: #3a5134 !important;
 }
 .title {
   h2 {
     letter-spacing: 0.05em;
-    color: #3A5134;
+    color: #3a5134;
     font-size: 1.6em;
   }
 }
@@ -151,7 +170,7 @@ export default {
 }
 .amount {
   white-space: nowrap;
-  color: #3A5134;
+  color: #3a5134;
   font-weight: bold;
   position: relative;
   margin-right: 5px;
@@ -169,7 +188,7 @@ export default {
 }
 .title-wrapper {
   p {
-    color: #3A5134;
+    color: #3a5134;
   }
   &:hover {
     p {

@@ -12,7 +12,7 @@
           <div class="contact-vr-content">
             <div class="contact-vr-circle-fill"></div>
             <div class="contact-vr-img-circle">
-              <a href="https://zalo.me/0369525971">
+              <a href="https://zalo.me/0979.533.786">
                 <img
                   src="https://zhomestay.vn/wp-content/plugins/button-contact-vr/img/zalo.png"
                 />
@@ -24,7 +24,7 @@
           <div class="phone-vr">
             <div class="phone-vr-circle-fill"></div>
             <div class="phone-vr-img-circle">
-              <a href="tel:84369525971">
+              <a href="tel:84979.533.786">
                 <img
                   alt="Phone"
                   src="https://zhomestay.vn/wp-content/plugins/button-contact-vr/img/phone.png"

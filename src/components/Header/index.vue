@@ -1,9 +1,12 @@
 <template>
   <div id="header-wrapper">
-    <div class="bg-menu">
+    <!-- <div class="bg-menu">
       <img src="../../assets/bgmenu1.jpg" alt="" />
       <div class="fill-bg"></div>
-    </div>
+      <div class="welcome-fami">
+        <h1>Chào mừng bạn đến với Fami Homestay</h1>
+      </div>
+    </div> -->
 
     <div class="container-menu" style="padding: 10px 0">
       <div class="container">
@@ -52,8 +55,8 @@
                         <a>Quản lý</a>
                       </li>
                       <!-- <li class="menu-item"><a>Airbnb</a></li> -->
-                      <li class="menu-item" @click="handlePush('contact')">
-                        <a>liên hệ</a>
+                      <li class="menu-item">
+                        <a href="#contact">liên hệ</a>
                       </li>
                     </ul>
                   </div>
@@ -77,8 +80,8 @@
               <!-- <h5>(+84) 369 525 971</h5> -->
 
               <a href="tel:84369525971">
-                <el-button color="#3A5134" round type="danger" plain
-                  >HOTLINE:0979.533.786</el-button
+                <el-button color="#f24c5b" round
+                  ><div class="text">hotline:0979.533.786</div></el-button
                 ></a
               >
             </div>
@@ -140,7 +143,7 @@
 
 <script>
 import { ref, defineComponent } from "vue";
-import axios from "axios";
+import BaseRequest from "../../core/BaseRequest.js";
 import { useRouter } from "vue-router";
 export default {
   setup() {
@@ -158,11 +161,9 @@ export default {
     }
     getListArea();
     function getListArea() {
-      axios
-        .get(`http://localhost:3000/api/v1/area?page=1&perPage=10`)
-        .then((res) => {
-          listArea.value = res.data.result;
-        });
+      BaseRequest.get(`area?page=1&perPage=10`).then((res) => {
+        listArea.value = res.data.result;
+      });
     }
     function showMenu() {
       drawer.value = true;
@@ -174,7 +175,7 @@ export default {
 
 <style lang="scss" scope>
 .container-menu {
-  position: absolute;
+  // position: absolute;
   width: 100%;
   top: 0;
 }
@@ -182,7 +183,7 @@ export default {
   position: relative;
   img {
     width: 100%;
-    max-height: 600px;
+    max-height: 500px;
   }
   .fill-bg {
     position: absolute;
@@ -192,12 +193,25 @@ export default {
     bottom: 0;
     background: rgba(0, 0, 0, 0.5);
   }
+  .welcome-fami {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    text-align: center;
+    margin: 0px auto;
+    h1 {
+      font-size: 2rem;
+      text-transform: uppercase;
+      color: #ffffff78;
+    }
+  }
 }
 @media screen and (max-width: 764px) {
   .bg-menu {
     display: none;
   }
-  .container-menu{
+  .container-menu {
     position: relative;
   }
 }
@@ -220,7 +234,7 @@ export default {
   font-size: 0.9em;
   text-transform: uppercase;
   font-weight: 700;
-  font-family: "Quicksand", sans-serif;
+  font-family: inherit;
   color: #fff;
   cursor: pointer;
   position: relative;
@@ -234,7 +248,7 @@ export default {
     li {
       padding: 5px;
       font-size: 0.85em;
-      color: #3A5134;
+      color: #3a5134;
     }
     li:hover {
       color: #cf9d6c;
@@ -278,9 +292,9 @@ export default {
       margin: 10px 0;
       padding: 5px 5px;
       text-decoration: none;
-      color: #fff;
-      font-family: "Quicksand", sans-serif;
-      font-size: 0.9em;
+      color: #3a5134;
+      font-family: inherit;
+      // font-size: 0.9em;
       font-weight: 700;
       transition: 0.5s;
       z-index: 1;
@@ -319,6 +333,10 @@ export default {
 }
 .number-phone {
   color: #cf9d6c;
+  .text {
+    font-weight: 700;
+    text-transform: uppercase;
+  }
 }
 .booking {
   padding: 8px 20px;
@@ -341,7 +359,7 @@ export default {
     font-size: 1em;
     text-transform: uppercase;
     font-weight: 700;
-    font-family: "Quicksand", sans-serif;
+    font-family: inherit;
     color: #7f7f7f;
     cursor: pointer;
     &:hover {

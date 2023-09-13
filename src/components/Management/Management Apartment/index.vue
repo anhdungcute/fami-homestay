@@ -97,6 +97,14 @@
             <el-input
               :rows="2"
               type="textarea"
+              v-model="formDepartment.introduce"
+              placeholder="Nhập giới thiệu..."
+            />
+          </el-form-item>
+          <el-form-item label="Mô tả">
+            <el-input
+              :rows="2"
+              type="textarea"
               v-model="formDepartment.description"
               placeholder="Nhập giới thiệu..."
             />
@@ -128,9 +136,9 @@
 </template>
 
 <script>
-import { ref, computed } from "vue";
-import axios from "axios";
+import { ref } from "vue";
 import { ElNotification } from "element-plus";
+import BaseRequest from "../../../core/BaseRequest.js";
 export default {
   setup() {
     const dialogTableVisible = ref(false);
@@ -151,6 +159,7 @@ export default {
     ]);
     const formDepartment = ref({
       name: "",
+      introduce: "",
       description: "",
       images: [],
       area: "",
@@ -164,104 +173,89 @@ export default {
     // Hàm gọi list căn hô
     getListDeprtment();
     function getListDeprtment() {
-      axios
-        .get(`http://localhost:3000/api/v1/department?page=1&perPage=10`)
-        .then((res) => {
-          tableData.value = res.data.result;
-        });
+      console.log("test", BaseRequest);
+      BaseRequest.get("department?page=1&perPage=10").then((res) => {
+        tableData.value = res.data.result;
+      });
     }
     // Hàm gọi list khu vực
     getListArea();
     function getListArea() {
-      axios
-        .get(`http://localhost:3000/api/v1/area?page=1&perPage=10`)
-        .then((res) => {
-          listArea.value = res.data.result;
-        });
+      BaseRequest.get(`area?page=1&perPage=10`).then((res) => {
+        listArea.value = res.data.result;
+      });
     }
     // Hàm thêm mới khu vực
     function handlerCreate() {
-      axios
-        .post("http://localhost:3000/api/v1/department", formDepartment.value)
-        .then((res) => {
-          if (res) {
-            formDepartment.value = {
-              name: "",
-              description: "",
-              images: [],
-              area: "",
-              price: "",
-              type: "",
-            };
-            getListDeprtment();
-            dialogTableVisible.value = false;
-            ElNotification({
-              title: "Thành công",
-              message: "Thêm căn hộ thành công",
-              type: "success",
-            });
-          }
-        });
+      BaseRequest.post("department", formDepartment.value).then((res) => {
+        if (res) {
+          formDepartment.value = {
+            name: "",
+            description: "",
+            images: [],
+            area: "",
+            price: "",
+            type: "",
+          };
+          getListDeprtment();
+          dialogTableVisible.value = false;
+          ElNotification({
+            title: "Thành công",
+            message: "Thêm căn hộ thành công",
+            type: "success",
+          });
+        }
+      });
     }
     // Hàm sửa khu vực
     function handlerEdit(id) {
       delete formDepartment.value.area;
-      axios
-        .put(
-          `http://localhost:3000/api/v1/department/${id}`,
-          formDepartment.value
-        )
-        .then((res) => {
-          if (res) {
-            getListDeprtment();
-            dialogTableVisible.value = false;
-            ElNotification({
-              title: "Thành công",
-              message: "Chỉnh sửa khu vực thành công",
-              type: "success",
-            });
-          }
-        });
+      BaseRequest.put(`department/${id}`, formDepartment.value).then((res) => {
+        if (res) {
+          getListDeprtment();
+          dialogTableVisible.value = false;
+          ElNotification({
+            title: "Thành công",
+            message: "Chỉnh sửa khu vực thành công",
+            type: "success",
+          });
+        }
+      });
     }
     const handleEdit = (scope) => {
-      axios
-        .get(`http://localhost:3000/api/v1/department/${scope.row._id}`)
-        .then((res) => {
-          if (res) {
-            console.log("rtess", res.data);
-            fileList.value = [];
-            dataUpload.value = [];
-            formDepartment.value = res.data;
-            formDepartment.value.area = res.data.area._id;
-            if (res.data?.images) {
-              res.data.images.forEach((el) => {
-                fileList.value.push({
-                  uid: el,
-                  name: el,
-                  url: `http://localhost:3000/${el}`,
-                });
-                dataUpload.value.push({ uid: el, url: el });
+      BaseRequest.get(`department/${scope.row._id}`).then((res) => {
+        if (res) {
+          fileList.value = [];
+          dataUpload.value = [];
+          formDepartment.value = res.data;
+          formDepartment.value.area = res.data.area._id;
+          if (res.data?.images) {
+            res.data.images.forEach((el) => {
+              fileList.value.push({
+                uid: el,
+                name: el,
+                url: `http://localhost:3000/${el}`,
               });
-            }
-
-            isCheck.value = false;
-            dialogTableVisible.value = true;
-          }
-        });
-    };
-    const handleDelete = (scope) => {
-      axios
-        .delete(`http://localhost:3000/api/v1/department/${scope.row._id}`)
-        .then((res) => {
-          if (res) {
-            getListDeprtment();
-            ElNotification({
-              title: "Thành công",
-              message: "Xóa khu vực thành công",
-              type: "success",
+              dataUpload.value.push({ uid: el, url: el });
             });
           }
-        });
+
+          isCheck.value = false;
+          dialogTableVisible.value = true;
+        }
+      });
+    };
+    const handleDelete = (scope) => {
+      BaseRequest.delete(`department/${scope.row._id}`).then((res) => {
+        if (res) {
+          getListDeprtment();
+          ElNotification({
+            title: "Thành công",
+            message: "Xóa khu vực thành công",
+            type: "success",
+          });
+        }
+      });
     };
 
     function showFormDepartment(check) {
@@ -288,7 +282,6 @@ export default {
       if (isCheck.value) {
         handlerCreate();
       } else {
-        console.log("vào elsse");
         handlerEdit(formDepartment.value._id);
       }
     }
@@ -296,16 +289,12 @@ export default {
     function UploadFile(e) {
       const fd = new FormData();
       fd.append("file", e.raw);
-      axios
-        .post("http://localhost:3000/api/v1/upload/single", fd)
-        .then((res) => {
-          dataUpload.value.push({ uid: e.uid, url: res.data });
-        });
+      BaseRequest.post("upload/single", fd).then((res) => {
+        dataUpload.value.push({ uid: e.uid, url: res.data });
+      });
     }
     function handleRemove(e) {
-      console.log("handleRemove", e);
       dataUpload.value = dataUpload.value.filter((el) => el.uid != e.uid);
-      console.log("xóa", dataUpload.value);
     }
     return {
       options,

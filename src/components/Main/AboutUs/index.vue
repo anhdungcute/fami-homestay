@@ -31,24 +31,24 @@
           <div>
             <p>
               Thoát khỏi sự hối hả và rắc rối của cuộc sống hàng ngày và đến với
-              FHomestay, nơi một thế giới thanh bình đang chờ đón bạn. Hãy vứt
+              Fami Homestay, nơi một thế giới thanh bình đang chờ đón bạn. Hãy vứt
               bỏ mọi lo lắng của bạn và hòa mình vào bầu không khí thư thái,
               tuyệt đẹp và được nuông chiều và trẻ hóa..
             </p>
           </div>
           <div class="elementor-icon row mt-5">
-            <div class="elementor-icon-box col-2">
+            <div class="elementor-icon-box col-lg-2 col-md-2 col-sm-2 col-3">
               <i class="fa-regular fa-star"></i>
             </div>
-            <div class="elementor-icon-box-content col-10">
+            <div class="elementor-icon-box-content col-lg-10 col-md-10 col-sm-10 col-9">
               Mức độ hài của của khách hàng luôn được đánh giá cao
             </div>
           </div>
           <div class="elementor-icon row mt-5">
-            <div class="elementor-icon-box col-2">
+            <div class="elementor-icon-box col-lg-2 col-md-2 col-sm-2 col-3">
               <i class="fa-solid fa-house"></i>
             </div>
-            <div class="elementor-icon-box-content col-10">
+            <div class="elementor-icon-box-content col-lg-10 col-md-10  col-sm-10 col-9">
               Nơi đem đến sự bình yên như ngôi nhà thứ hai của bạn
             </div>
           </div>
@@ -62,9 +62,7 @@
           data-aos-once="true"
           data-aos-duration="1000"
         >
-          <img
-            src="https://demo2.themelexus.com/amihomestay/wp-content/uploads/2019/08/aboutus01.jpg "
-          />
+          <img src="../../../assets/imgwelcome1.jpg" />
         </div>
       </div>
       <div class="about-us-section">
@@ -160,16 +158,6 @@ export default {
     const router = useRouter();
     const route = useRoute();
     const id = ref(route.query.id);
-    checkRoute();
-    function checkRoute() {
-      console.log("route", route.query);
-    }
-    watch(
-      () => route.query.id,
-      (id) => {
-        console.log(`đã thyta dsa`);
-      }
-    );
     function handlePush(i) {
       if (i) {
         router.push({
@@ -183,13 +171,6 @@ export default {
 </script>
 
 <style lang="scss" scope>
-// .about-us {
-//   position: relative;
-//   img {
-//     width: 100%;
-//     height: 500px;
-//   }
-// }
 .text-about-us {
   padding-top: 40px;
   text-align: center;
@@ -268,6 +249,16 @@ export default {
   }
   .welcome {
     margin: 40px 0;
+  }
+}
+@media screen and (max-width: 987px) {
+  .elementor {
+    padding: 0 0 20px 20px;
+  }
+  .elementor-icon-box {
+    i {
+      font-size: 1.5rem;
+    }
   }
 }
 .elementor-icon {

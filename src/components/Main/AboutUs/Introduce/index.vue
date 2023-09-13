@@ -144,7 +144,7 @@
               <div
                 v-for="(item, index) in dataRoom.utilities"
                 :key="index"
-                class="text-tt"
+                class="text-ti"
               >
                 - {{ item }}
               </div>
@@ -159,7 +159,7 @@
           Danh sách phòng tại
           {{
             route.name == "about-us-homestay"
-              ? "Homestay Ocean park"
+              ? "Homestay Ecopark"
               : "Chung cư mini"
           }}
         </div>
@@ -168,6 +168,7 @@
             class="col-lg-4 col-md-4 col-sm-6 col-6"
             v-for="(i, n) in dataRoom.departments"
             :key="n"
+            @click="pushRouter(i)"
           >
             <div>
               <div
@@ -185,7 +186,7 @@
                   </div>
                   <div class="price-wrapper">
                     <span class="amount"
-                      >{{ i.price ? i.price : "Liên hệ" }}
+                      >{{ format(i.price) }}
                       <u style="font-size: 0.7em; padding-bottom: 2px"
                         >đ</u
                       ></span
@@ -215,7 +216,7 @@
 import { ref, defineComponent, onBeforeMount, watch } from "vue";
 import { useRouter } from "vue-router";
 import { useRoute } from "vue-router";
-import axios from "axios";
+import BaseRequest from "../../../../core/BaseRequest.js";
 export default {
   setup() {
     const router = useRouter();
@@ -226,23 +227,22 @@ export default {
     const contentItem = ref(false);
     checkRoute();
     function checkRoute() {
-      axios
-        .get(`http://localhost:3000/api/v1/area/${route.query.id}`)
-        .then((res) => {
-          if (res) {
-            console.log("res", res);
-            dataRoom.value = res.data;
-          }
-        });
+      BaseRequest.get(`area/${route.query.id}`).then((res) => {
+        if (res) {
+          dataRoom.value = res.data;
+        }
+      });
     }
     watch(
       () => route.query.id,
       (id) => {
-        axios.get(`http://localhost:3000/api/v1/area/${id}`).then((res) => {
-          if (res) {
-            dataRoom.value = res.data;
-          }
-        });
+        if (route.name == "about-us-homestay") {
+          BaseRequest.get(`area/${id}`).then((res) => {
+            if (res) {
+              dataRoom.value = res.data;
+            }
+          });
+        }
       }
     );
 
@@ -254,7 +254,28 @@ export default {
         });
       }
     }
-    return { handlePush, route, dataRoom, contentItem, list };
+    function pushRouter(val) {
+      router.push({
+        name: "detail-home",
+        query: { id: val._id },
+      });
+    }
+    const format = (num) => {
+      const n = String(num),
+        p = n.indexOf(".");
+      return n.replace(/\d(?=(?:\d{3})+(?:\.|$))/g, (m, i) =>
+        p < 0 || i < p ? `${m},` : m
+      );
+    };
+    return {
+      handlePush,
+      pushRouter,
+      format,
+      route,
+      dataRoom,
+      contentItem,
+      list,
+    };
   },
 };
 </script>
@@ -425,7 +446,7 @@ export default {
     color: #cf9d6c;
   }
 }
-.text-tt {
+.text-ti {
   font-size: 17px;
 }
 .text-option {

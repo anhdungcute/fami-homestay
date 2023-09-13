@@ -21,7 +21,7 @@
                 <div class="row align-items-center">
                   <div class="col-md-2 col-xl-1 col-sm-2 col-2 p-0 text-center">
                     <span style="padding-right: 5px"> {{ index + 1 }}</span
-                    ><i class="fa-solid fa-star" style="color:#f7ba2a"></i>
+                    ><i class="fa-solid fa-star" style="color: #f7ba2a"></i>
                   </div>
                   <div class="col-md-10 col-xl-11 col-sm-10 col-10 p-0">
                     <div class="row align-items-center">
@@ -143,6 +143,56 @@
         </div>
       </template>
     </el-dialog>
+    <!-- <div class="col-lg-4 col-md-5 col-12">
+          <div class="is-sticky-column__inner " >
+            <div class="col-inner">
+              <div class="price">
+                <b>{{ addCommas(priceRoom) }}đ</b>/đêm
+              </div>
+              <div class="mt-4">
+                <div class="book">
+                  <div class="mb-2"><b>Thời gian đặt phòng</b></div>
+                  <div>
+                    <el-date-picker
+                      v-model="dateBook"
+                      class="w-100"
+                      type="daterange"
+                      range-separator="-"
+                      start-placeholder="Ngày nhận phòng"
+                      end-placeholder="Ngày trả phòng"
+                      @change="changeDay"
+                    />
+                  </div>
+                  <div class="mt-4">
+                    <span>Số lượng phòng</span>
+                    <el-input-number
+                      v-model="numRoom"
+                      :min="1"
+                      :max="10"
+                      @change="changeNumRoom"
+                    />
+                  </div>
+                  <div
+                    class="mt-4 d-flex justify-content-between"
+                    v-if="priceBook"
+                  >
+                    <div><span> Giá phòng:</span>{{ priceBook }}</div>
+                    <div>
+                      <el-button size="small" type="primary" @click="cancelBook"
+                        >Hủy tùy chọn</el-button
+                      >
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="text-center mt-4">
+                <el-button type="danger" size="medium" class="w-100"
+                  >Đặt phòng</el-button
+                >
+              </div>
+            </div>
+          </div>
+        </div> -->
   </div>
 </template>
 
@@ -157,8 +207,6 @@ export default {
     const value = ref(null);
     const fileList = ref([]);
     const handleRemove = (file) => {
-      console.log(file);
-      console.log("file", fileList);
       fileList.value = fileList.value.filter((el) => el.uid != file.uid);
     };
     return { modalOpen, value, CloseBold, fileList, handleRemove };
